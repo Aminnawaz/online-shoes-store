@@ -156,10 +156,10 @@ const ReviewSection = () => {
 export default function ProductDetail() {
   const { id } = useParams();
   const product = PRODUCTS.find(p => p.id === id);
-  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+  const [selectedSize, setSelectedSize] = useState<number | string | null>(null);
 
   if (!product) return (
-    <div className="pt-40 text-center text-2xl font-display">Product not found.</div>
+    <div className="pt-40 text-center text-2xl font-display uppercase italic">Gear not found.</div>
   );
 
   const whatsappMsg = `https://wa.me/923215486916?text=Hi%20Pitch%20Ready!%20I%20want%20to%20order%20${encodeURIComponent(product.name)}%2C%20Size%20${selectedSize || '[Select Size]'}.%20Please%20confirm%20availability%20and%20price.%20Thank%20you!`;
@@ -199,18 +199,18 @@ export default function ProductDetail() {
 
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="font-display uppercase tracking-widest text-sm">Select Size (EU)</span>
-              <button className="text-xs text-brand-gold underline uppercase">Size Guide</button>
+              <span className="font-display uppercase tracking-widest text-xs text-gray-400">Select Variant / Size</span>
+              {typeof product.sizes[0] === 'number' && <button className="text-[10px] text-brand-gold underline uppercase">Size Guide</button>}
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {product.sizes.map(size => (
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`w-12 h-12 flex items-center justify-center rounded border font-bold transition-all ${
+                  className={`min-w-[3rem] h-12 px-3 flex items-center justify-center rounded-lg border font-black transition-all text-sm ${
                     selectedSize === size 
                       ? 'bg-brand-gold border-brand-gold text-brand-black' 
-                      : 'border-white/10 hover:border-brand-gold text-gray-400'
+                      : 'border-white/10 hover:border-brand-gold/50 text-gray-400 hover:text-brand-gold'
                   }`}
                 >
                   {size}
@@ -235,11 +235,11 @@ export default function ProductDetail() {
           </div>
 
           <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
-            <h3 className="font-display text-lg uppercase tracking-widest text-brand-gold border-b border-white/5 pb-2">Description</h3>
-            <p className="text-gray-400 leading-relaxed">
+            <h3 className="font-display text-sm uppercase tracking-widest text-brand-gold border-b border-white/5 pb-2 font-black">Field Notes</h3>
+            <p className="text-gray-400 leading-relaxed text-sm">
               {product.description}
               <br /><br />
-              Perfect for {product.category === 'FG' ? 'professional grass pitches' : product.category === 'TF' ? 'turf and artificial surfaces' : 'indoor and court play'}. Engineered for Pakistani conditions.
+              <span className="text-brand-gold italic">Pro Tip:</span> Verified for performance on Pakistani pitches. Direct source for elite {product.category.toLowerCase()} gear.
             </p>
           </div>
 
@@ -261,15 +261,16 @@ export default function ProductDetail() {
       
       {/* Related */}
       <div className="mt-32">
-        <h2 className="text-3xl font-black mb-12">Related Boots</h2>
+        <h2 className="text-3xl font-black mb-12 uppercase italic">Battle-Tested Gear</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {PRODUCTS.slice(0, 4).map(p => (
-            <Link to={`/shop/${p.id}`} key={p.id} className="group overflow-hidden rounded-xl bg-gray-900/50 border border-white/5 p-4 hover:border-brand-gold/30 transition-all">
-                <div className="aspect-square overflow-hidden rounded-lg mb-4">
+          {PRODUCTS.filter(p => p.id !== product.id).slice(0, 4).map(p => (
+            <Link to={`/shop/${p.id}`} key={p.id} className="group overflow-hidden rounded-2xl bg-white/5 border border-white/5 p-4 hover:border-brand-gold/30 transition-all">
+                <div className="aspect-square overflow-hidden rounded-xl mb-4 bg-gray-900">
                     <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                 </div>
-                <h4 className="font-bold text-sm mb-1">{p.name}</h4>
-                <p className="text-brand-gold font-display font-bold">Rs. {p.price.toLocaleString()}</p>
+                <div className="text-[10px] text-gray-500 font-black uppercase mb-1">{p.brand}</div>
+                <h4 className="font-bold text-sm mb-2 group-hover:text-brand-gold transition-colors line-clamp-1">{p.name}</h4>
+                <p className="text-brand-gold font-display font-black text-lg">Rs. {p.price.toLocaleString()}</p>
             </Link>
           ))}
         </div>

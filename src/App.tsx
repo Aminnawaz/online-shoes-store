@@ -5,7 +5,7 @@
 
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { Header, Footer, WhatsAppFloat } from './components/Layout';
+import { Header, Footer, WhatsAppFloat, MobileStickyBanner } from './components/Layout';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
@@ -58,6 +58,7 @@ export default function App() {
         </main>
         <Footer />
         <WhatsAppFloat />
+        <MobileStickyBanner />
       </div>
     </Router>
   );

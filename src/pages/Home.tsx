@@ -72,7 +72,7 @@ const ProductCard = ({ product }: { product: typeof PRODUCTS[0] }) => (
         alt={product.name}
         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
       />
-      <div className="absolute top-4 left-4">
+      <div className="absolute top-4 left-4 flex gap-1">
         <span className="bg-brand-gold text-brand-black px-2 py-1 text-[10px] font-black uppercase rounded">
           {product.category}
         </span>
@@ -81,10 +81,14 @@ const ProductCard = ({ product }: { product: typeof PRODUCTS[0] }) => (
     
     <div className="p-5">
       <div className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">{product.brand}</div>
-      <h3 className="text-lg font-bold mb-2 group-hover:text-brand-gold transition-colors">{product.name}</h3>
+      <h3 className="text-lg font-bold mb-2 group-hover:text-brand-gold transition-colors line-clamp-1">{product.name}</h3>
       <div className="flex items-center justify-between mb-4">
         <span className="text-xl font-display font-bold text-brand-gold">Rs. {product.price.toLocaleString()}</span>
-        <span className="text-xs text-gray-500">Sizes: {Math.min(...product.sizes)}-{Math.max(...product.sizes)}</span>
+        <span className="text-[10px] text-gray-500 font-bold uppercase italic">
+          {product.sizes.length > 0 && typeof product.sizes[0] === 'number' 
+            ? `Sizes: ${Math.min(...product.sizes as number[])}-${Math.max(...product.sizes as number[])}`
+            : `Size: ${product.sizes[0] || 'N/A'}`}
+        </span>
       </div>
       
       <div className="grid grid-cols-2 gap-2">
@@ -95,7 +99,7 @@ const ProductCard = ({ product }: { product: typeof PRODUCTS[0] }) => (
           Details
         </Link>
         <a
-          href={`${STORE_DETAILS.whatsapp}?text=Hi Pitch Ready! I'm interested in the ${product.name}. Is it available in size 42?`}
+          href={`${STORE_DETAILS.whatsapp}?text=Hi Pitch Ready! I'm interested in the ${product.name}.`}
           target="_blank"
           rel="noreferrer"
           className="bg-brand-green/20 hover:bg-brand-green text-brand-green hover:text-brand-black rounded py-2 text-center text-xs font-bold transition-all flex items-center justify-center gap-1"
@@ -139,7 +143,66 @@ const InstagramFeed = () => (
   </section>
 );
 
-import { Instagram } from 'lucide-react';
+import { Instagram, Shield, Truck, Zap, Globe, MapPin } from 'lucide-react';
+
+const CategorySection = () => {
+  const categories = [
+    { title: 'Studs & Cleats', desc: 'Elite Performance', icon: '⚽' },
+    { title: 'Gripper Socks', desc: 'Maximum Control', icon: '🧦' },
+    { title: 'Shin Guards', desc: 'Pro Protection', icon: '🛡️' },
+    { title: 'Match Balls', desc: 'FIFA Quality', icon: '⚽' },
+    { title: 'Training Bibs', desc: 'Team Drills', icon: '🎽' },
+    { title: 'Apparel', desc: 'Shorts & Kits', icon: '👕' },
+  ];
+
+  return (
+    <section className="py-24 bg-brand-black border-y border-brand-gold/10">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-black">Professional Armory</h2>
+          <p className="text-brand-gold font-display uppercase tracking-widest mt-2 font-black">Elite gear for Every Position</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+          {categories.map((cat, i) => (
+            <Link
+              key={i}
+              to="/shop"
+              className="group bg-white/5 border border-white/5 p-6 rounded-2xl text-center hover:border-brand-gold/40 transition-all hover:bg-brand-gold/5"
+            >
+              <div className="text-3xl mb-4 group-hover:scale-125 transition-transform">{cat.icon}</div>
+              <h3 className="font-display text-sm mb-1 leading-tight">{cat.title}</h3>
+              <p className="text-[10px] text-gray-500 uppercase tracking-tighter">{cat.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const WhyChooseUs = () => {
+  const features = [
+    { icon: <Shield size={32} className="text-brand-gold" />, title: "Quality Guaranteed", desc: "Every boot is vetted for performance on Pakistani pitches." },
+    { icon: <Truck size={32} className="text-brand-gold" />, title: "Fast PK Delivery", desc: "Nationwide shipping directly to your doorstep in 2-4 days." },
+    { icon: <Globe size={32} className="text-brand-gold" />, title: "WhatsApp Support", desc: "Direct communication for sizing and real-time order tracking." },
+  ];
+
+  return (
+    <section className="py-24 bg-brand-black">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
+        {features.map((f, i) => (
+          <div key={i} className="flex flex-col items-center text-center space-y-4">
+            <div className="w-16 h-16 bg-brand-gold/10 rounded-full flex items-center justify-center">
+              {f.icon}
+            </div>
+            <h3 className="text-2xl font-black uppercase italic">{f.title}</h3>
+            <p className="text-gray-400 text-sm max-w-xs">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default function Home() {
   return (
@@ -159,11 +222,13 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PRODUCTS.map(product => (
+          {PRODUCTS.slice(0, 6).map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
+
+      <CategorySection />
       
       <section className="py-24 bg-white/5 border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
@@ -185,6 +250,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <WhyChooseUs />
       
       <InstagramFeed />
     </div>

@@ -175,6 +175,25 @@ export const WhatsAppFloat = () => {
   );
 };
 
+export const MobileStickyBanner = () => {
+  return (
+    <Link
+      to="/shop"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-brand-black border-t border-brand-gold/30 p-4 flex items-center justify-between glow-gold animate-pulse"
+    >
+      <div className="flex items-center gap-3">
+        <span className="text-xl">⚽</span>
+        <div className="font-display font-black uppercase text-sm tracking-widest text-white leading-none">
+          New Arrivals <br />
+          <span className="text-brand-gold text-[10px]">Order via WhatsApp</span>
+        </div>
+      </div>
+      <div className="bg-brand-gold text-brand-black px-4 py-2 rounded text-xs font-bold uppercase">
+        Shop Now
+      </div>
+    </Link>
+  );
+};
 export const TrustBadges = () => {
   const badges = [
     { icon: <CheckCircle className="text-brand-gold" />, title: "Genuine Products" },
